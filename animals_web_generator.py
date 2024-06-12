@@ -135,8 +135,10 @@ def get_user_input():
             skin_type = input("Enter here: ")
             new_skin_type = ''
             if skin_type[0].islower():
-                    new_skin_type = skin_type[0].upper() + skin_type[1:]    
-            return new_skin_type
+                    new_skin_type = skin_type[0].upper() + skin_type[1:]
+                    return new_skin_type
+            else:
+                return skin_type
         except ValueError as e:
             print("You entered something that is not a number! Error: ", e)
 
