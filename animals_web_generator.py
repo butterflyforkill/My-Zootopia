@@ -34,13 +34,17 @@ def animal_info(animal):
     output = ''
     # Check if each field exists before printing
     if "name" in animal:
-        output += f"Name: {animal['name']}<br/>\n"
+        output += "<div class='card__title'>"
+        output += f"{animal['name']}<br/>\n"
+        output += '</div>'
     if "diet" in characteristics:
-        output += f"Diet: {characteristics['diet']}<br/>\n"
+        output += '<p class="card__text">'
+        output += f"<strong>Diet:</strong> {characteristics['diet']}<br/>\n"
     if "locations" in animal and animal["locations"]:  # Check for non-empty list
-        output += f"Location: {animal['locations'][0]}<br/>\n"
+        output += f"<strong>Location:</strong> {animal['locations'][0]}<br/>\n"
     if "type" in characteristics:
-        output += f"Type: {characteristics['type']}<br/>\n" 
+        output += f"<strong>Type:</strong> {characteristics['type']}<br/>\n" 
+        output += '</p>'
     return output
 
 
