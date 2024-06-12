@@ -7,31 +7,77 @@ def load_data(file_path):
         return json.load(handle)
 
 
-def print_animal_info(animal):
+def read_html(file_path):
+    """Load HTML file
+
+    Args:
+        file_path: html file
+
+    Returns:
+        string: html file
+    """
+    with open(file_path, "r") as file:
+        return file.read()
+
+
+def animal_info(animal):
     """ 
-    Prints information about a single animal.
+    Returns string - information about a single animal.
 
     Args:
         animal (dict): A dictionary representing an animal entry.
+    
+    Returns:
+        animal = string
     """
     characteristics = animal.get("characteristics", {})
+    output = ''
     # Check if each field exists before printing
     if "name" in animal:
-        print(f"Name: {animal['name']}")
+        output += f"Name: {animal['name']}\n"
     if "diet" in characteristics:
-        print(f"Diet: {characteristics['diet']}")
+        output += f"Diet: {characteristics['diet']} \n"
     if "locations" in animal and animal["locations"]:  # Check for non-empty list
-        print(f"Location: {animal['locations'][0]}")
+        output += f"Location: {animal['locations'][0]}\n"
     if "type" in characteristics:
-        print(f"Type: {characteristics['type']}")
-    print()  # Add a blank line between animals
+        output += f"Type: {characteristics['type']}\n" 
+    return output
+
+
+def all_animal_info(data):
+    """
+    Generates a string containing formatted information for all animals in the provided data.
+
+    Args:
+        data (list): A list of dictionaries, where each dictionary represents an animal with information.
+
+    Returns:
+        str: A string containing formatted information for all animals, separated by newlines.
+    """
+    output = ''
+    for animal in data:
+        output += animal_info(animal) + '\n'
+    return output
+
+
+def write_new_html(data, html_name):
+    """Write new html file with replaced animal data
+
+    Args:
+        data (string): animal data
+        html_name (string): name of the file
+    """
+    with open(html_name, 'w') as file:
+        file.write(data)
 
 
 def main():
-    animals_data = load_data('My-Zootopia/animals_data.json')
-    for animal in animals_data:
-        print_animal_info(animal)
-
+    animals_data = load_data('animals_data.json')
+    html_string = read_html('animals_template.html')
+    animal_info = all_animal_info(animals_data)
+    new_html_data = html_string.replace("__REPLACE_ANIMALS_INFO__", animal_info)
+    write_new_html(new_html_data, "animals.html")
+  
 
 if __name__ == "__main__":
     main()
