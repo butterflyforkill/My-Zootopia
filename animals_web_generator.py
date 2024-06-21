@@ -1,12 +1,4 @@
-import json
-import requests
-from config.config_files import APIkeys
-
-
-def load_data(file_path):
-    """ Loads a JSON file """
-    with open(file_path, "r") as handle:
-        return json.load(handle)
+import data_fetcher
 
 
 def read_html(file_path):
@@ -86,35 +78,16 @@ def write_new_html(data, html_name):
     """
     with open(html_name, 'w') as file:
         file.write(data)
-  
-      
-def handle_user_input(data, user_input):
-    """
-    Filters animal data based on the user's chosen skin type.
 
-    This function takes a list of animal entries (dictionaries) 
-    and the user's selected skin type (integer).
-    It iterates through the animal data and creates 
-    a new list containing only animals whose
-    'skin_type' (within the 'characteristics' dictionary) 
-    matches the user's input.
 
-    Args:
-        data (list): A list of dictionaries representing animal entries. 
-            Each dictionary is assumed to have
-            a sub-dictionary named 'characteristics' 
-            containing a key 'skin_type' with an integer value.
-        user_input (int): The user's chosen skin type as an integer.
-
-    Returns:
-        list: A new list containing animal entries (dictionaries) 
-        that match the user's skin type preference.
-    """
-    new_data = []
-    for animal in data:
-        if user_input == animal['characteristics']['skin_type']:
-            new_data.append(animal)
-    return new_data
+def handle_fetcher_response(animal):
+    responce = data_fetcher.fetch_data(animal)
+    if responce == []:
+        return f"The animal {animal} doesn't exist"
+    elif type(responce) == tuple:
+        return f"Error: {responce[0]}, error message {responce[1]['error']}"
+    else:
+        all_animal_info(responce)
 
 
 def get_user_input():
@@ -131,70 +104,13 @@ def get_user_input():
     """
     while True:
         try:
-            print("Please, choose what animal skin type do you want: \n")
-            print("- Fur; \n")
-            print("- Hair; \n")
-            skin_type = input("Enter here: ")
-            new_skin_type = ''
-            if skin_type[0].islower():
-                    new_skin_type = skin_type[0].upper() + skin_type[1:]
-                    return new_skin_type
+            print("Please, enter a name of the animal. \n")
+            animal = input("Enter here: ")
+            new_animal = ''
+            if animal[0].islower():
+                    new_animal = animal[0].upper() + animal[1:]
+                    return new_animal
             else:
-                return skin_type
+                return animal
         except ValueError as e:
-            print("You entered something that is not a number! Error: ", e)
-
-
-def main():
-    """
-    Generates an HTML file containing 
-    information about animals relevant to user's skin type.
-
-    This function reads animal data from a JSON file, 
-    prompts the user for their skin type,
-    processes the animal data based on the 
-    user input using the `handle_user_input` function,
-    retrieves an HTML template, formats the animal 
-    information, and replaces a placeholder
-    in the template with the formatted information. 
-    Finally, it writes the modified HTML content
-    to a new HTML file.
-
-    **Assumptions:**
-
-        - The `load_data` function can load JSON data from a file.
-        - The `get_user_input` function prompts the user 
-            for their skin type and returns the input.
-        - The `handle_user_input` function takes animal data and user skin type,
-            and returns a potentially modified version of the animal data.
-        - The `read_html` function can read HTML content from a file.
-        - The `all_animal_info` function takes animal data 
-            and returns formatted information.
-        - The `write_new_html` function can write HTML content to a file.
-
-    **Note:**
-
-        - This function assumes the HTML template has 
-            a placeholder named "__REPLACE_ANIMALS_INFO__".
-
-    """
-    #need to use response.json()
-    name = 'cheetah'
-    api_url = 'https://api.api-ninjas.com/v1/animals?name={}'.format(name)
-    response = requests.get(api_url, headers={'X-Api-Key': APIkeys.APIkey})
-    if response.status_code == requests.codes.ok:
-        print(response.json())
-    else:
-        print("Error:", response.status_code, response.text)
-    
-    # animals_data = load_data('animals_data.json')
-    # skin_type = get_user_input()
-    # new_animals_data = handle_user_input(animals_data, skin_type)
-    # html_string = read_html('animals_template.html')
-    # animal_info = all_animal_info(new_animals_data)
-    # new_html_data = html_string.replace("__REPLACE_ANIMALS_INFO__", animal_info)
-    # write_new_html(new_html_data, "animals.html")
-  
-
-if __name__ == "__main__":
-    main()
+            print("You entered something that not an animal! Error: ", e)
