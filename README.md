@@ -1,8 +1,15 @@
-My-Zootopia - project for one of the lessons in Masterschool.
-- Add .gitignore.
-- Add functionality for parsing json and html file and changing data in it
-- Add parser(formating) to the animal info
-- Improve html for animal info
-My-Zootopia - project for one of the lessons in Masterschoolwith API.
-- Add functionality with getting data from api
-- Add parcer for parcing data into html
+# My-Zootopia Project
+
+This project is for one of the lessons in Masterschool.
+
+## Installation
+
+To install this project, simply clone the repository and install the dependencies in requirements.txt using `pip`
+
+## Usage
+
+To use this project, run the following command - `python3 main.py` or `python main.py`.
+
+## Contributing
+
+We can talk about this. 
