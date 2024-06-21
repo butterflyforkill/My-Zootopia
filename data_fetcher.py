@@ -1,4 +1,3 @@
-import json
 import requests
 from config.config_files import APIkeys
 

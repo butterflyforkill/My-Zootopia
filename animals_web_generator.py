@@ -81,13 +81,30 @@ def write_new_html(data, html_name):
 
 
 def handle_fetcher_response(animal):
+    """
+    Processes the response from the data fetcher for a given animal.
+
+    Args:
+        animal (str): The name of the animal to process data for.
+
+    Returns:
+        str: A message indicating the result of the data fetch operation.
+            - If the animal data doesn't exist, it returns a message stating 
+                that the animal doesn't exist.
+            - If the data fetcher returns an error tuple, it formats an error 
+                message with the error code and message.
+            - If the data fetch is successful, it calls the `all_animal_info` 
+                function to format the complete animal information 
+                (assuming this function exists).
+
+    """
     responce = data_fetcher.fetch_data(animal)
     if responce == []:
         return f"The animal {animal} doesn't exist"
     elif type(responce) == tuple:
-        return f"Error: {responce[0]}, error message {responce[1]['error']}"
+        return f"Error: {responce[0]}, error message: {responce[1]['error']}"
     else:
-        all_animal_info(responce)
+        return all_animal_info(responce)
 
 
 def get_user_input():
