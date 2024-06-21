@@ -1,4 +1,6 @@
 import json
+import requests
+from config.config_files import APIkeys
 
 
 def load_data(file_path):
@@ -176,13 +178,22 @@ def main():
             a placeholder named "__REPLACE_ANIMALS_INFO__".
 
     """
-    animals_data = load_data('animals_data.json')
-    skin_type = get_user_input()
-    new_animals_data = handle_user_input(animals_data, skin_type)
-    html_string = read_html('animals_template.html')
-    animal_info = all_animal_info(new_animals_data)
-    new_html_data = html_string.replace("__REPLACE_ANIMALS_INFO__", animal_info)
-    write_new_html(new_html_data, "animals.html")
+    #need to use response.json()
+    name = 'cheetah'
+    api_url = 'https://api.api-ninjas.com/v1/animals?name={}'.format(name)
+    response = requests.get(api_url, headers={'X-Api-Key': APIkeys.APIkey})
+    if response.status_code == requests.codes.ok:
+        print(response.json())
+    else:
+        print("Error:", response.status_code, response.text)
+    
+    # animals_data = load_data('animals_data.json')
+    # skin_type = get_user_input()
+    # new_animals_data = handle_user_input(animals_data, skin_type)
+    # html_string = read_html('animals_template.html')
+    # animal_info = all_animal_info(new_animals_data)
+    # new_html_data = html_string.replace("__REPLACE_ANIMALS_INFO__", animal_info)
+    # write_new_html(new_html_data, "animals.html")
   
 
 if __name__ == "__main__":
